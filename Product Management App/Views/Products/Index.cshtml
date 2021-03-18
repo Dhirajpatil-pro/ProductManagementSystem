@@ -1,0 +1,118 @@
+﻿@model IEnumerable<Product_Management_App.Models.Products>
+
+@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_site.cshtml";
+}
+
+<style>
+    th {
+        font-family: 'Roboto Condensed', sans-serif;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+</style>
+<div class="loading"></div>
+<div class="container">
+    <h3>Products</h3>
+
+    <p>
+        @Html.ActionLink("Create New", "AddProduct")
+    </p>
+    <table class="table" align="center">
+        <tr>
+            <th style="width:20%">
+                @Html.DisplayName("Image")
+            </th>
+            <th style="width:15%">
+                @Html.DisplayNameFor(model => model.SKU)
+            </th>
+            <th style="width:15%">
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th style="width:30%">
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th style="width:20%">
+                @Html.DisplayName("Actions")
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src="~/Uploads/@Path.GetFileName(item.ImagePath)" width="100" height="100" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SKU)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-small", @style = "background-color: #E8E8E8 " })
+                    <button type="button" class="btn btn-danger clkDelete" data-id="@item.ID" data-toggle="modal" data-target="#exampleModalCenter">Delete</button>
+                </td>
+            </tr>
+        }
+
+    </table>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Delete Product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are You Sure?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Back</button>
+                    <button type="button" class="btn btn-danger delete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.addEventListener('load', function () {
+            var rows = document.getElementsByTagName("table")[0].rows;
+            for (var i = 1; i < rows.length; i++) {
+                var yourString = rows[i].cells[3].innerHTML.trim();
+                var maxLength = 100;
+                var trimmedString = "";
+                if (yourString.length > maxLength) {
+
+                    trimmedString = yourString.substr(0, maxLength);
+
+                    //re-trim if we are in the middle of a word and
+                    trimmedString = trimmedString.substr(0, Math.min(trimmedString.length, trimmedString.lastIndexOf(" ")));
+                    trimmedString += "...";
+                    rows[i].cells[3].innerHTML = trimmedString;
+                }
+            }
+        }, false);
+        $('.clkDelete').click(function () {
+            var dataId = $(this).data('id');
+            $('.delete').attr('data-id', dataId);
+        });
+        $('.delete').click(function () {
+            $('#exampleModalCenter').hide();
+            var dataId = $(this).data('id');
+            $.post("Products/Delete", { "id": dataId }, function (response) {
+                window.location.href = response.redirectToUrl;
+            });
+        });
+    </script>
+</div>

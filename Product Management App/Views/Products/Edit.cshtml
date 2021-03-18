@@ -1,0 +1,203 @@
+﻿@model Product_Management_App.Models.Products
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_site.cshtml";
+}
+
+<style>
+    label,
+    h2 {
+        font-family: 'Roboto Condensed', sans-serif;
+    }
+
+    label {
+        font-size: .8rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+        font-size: .8rem;
+        height: 24px;
+        width: 100%;
+        border-color: lightgray;
+    }
+
+    .form-group {
+        margin: 1vh 0vh 1vh 0vh;
+    }
+
+    .fontsmall {
+        font-size: .8rem;
+        font-family: 'Roboto Condensed', sans-serif;
+    }
+
+    textarea {
+        width: 100%;
+        border-color: lightgray;
+    }
+
+        textarea:focus, input:focus {
+            outline: none;
+        }
+</style>
+
+
+
+@using (Html.BeginForm())
+{
+    <div class="loading"></div>
+    @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.ID)
+        @Html.HiddenFor(model => model.ImagePath)
+
+        <div class="container">
+            <h2>Edit Product</h2>
+            <div class="d-flex justify-content-end">
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label " })
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "fontsmall text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @rows = "3", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "fontsmall text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SKU, htmlAttributes: new { @class = "control-label " })
+                        @Html.EditorFor(model => model.SKU, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SKU, "", new { @class = "fontsmall text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SellingPrice, htmlAttributes: new { @class = "control-label " })
+                        @Html.EditorFor(model => model.SellingPrice, new { htmlAttributes = new { @type = "number", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.SellingPrice, "", new { @class = "fontsmall text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AvailableQty, htmlAttributes: new { @class = "control-label " })
+                        @Html.EditorFor(model => model.AvailableQty, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.AvailableQty, "", new { @class = "fontsmall text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CategoryId, "Category", htmlAttributes: new { @class = "control-label " })
+                        @Html.DropDownListFor(model => model.CategoryId, ViewBag.CategoryList as SelectList , "select category")
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 ">
+                    <div class="form-group">
+                        <label class="control-label ">Type</label>
+                        <br />
+                        @Html.RadioButtonFor(model => model.Type, 0, htmlAttributes: new { @id = "Physical", @checked = true })
+                        <label> Physical </label>
+                        @Html.RadioButtonFor(model => model.Type, 1, htmlAttributes: new { @id = "Virtual" })
+                        <label> Virtual </label>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Weight, "Weight (in Kg)", htmlAttributes: new { @class = "control-label " })
+                        @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @type = "number", @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "fontsmall text-danger" })
+                    </div>
+                    <div class="form-group" style="margin-top : 2.6rem">
+                        @Html.LabelFor(model => model.Length, "Length (in Cm)", htmlAttributes: new { @class = "control-label " })
+                        @Html.EditorFor(model => model.Length, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Length, "", new { @class = "fontsmall text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Width, "Width (in Cm)", htmlAttributes: new { @class = "control-label " })
+                        @Html.EditorFor(model => model.Width, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Width, "", new { @class = "fontsmall text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Height, "Height (in Cm)", htmlAttributes: new { @class = "control-label " })
+                        @Html.EditorFor(model => model.Height, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Height, "", new { @class = "fontsmall text-danger" })
+                    </div>
+                    <div class="file-upload-wrapper">
+                        <label for="img-upload">Image</label>
+                        <br />
+                        <input type="file" id="img-upload" class="file-upload" />
+                        <button id="btnUpload" class="btn btn-danger">Upload</button>
+                        <br />
+                        <span id="msgUpload" class="fontsmall" />
+                    </div>
+                </div>
+                <div class="col-12 my-5">
+                    <button type="submit" class="btn btn-danger col-2 fontsmall">Add Product</button>
+                </div>
+            </div>
+        </div>
+}
+
+
+<script>
+
+    $(document).ready(function () {
+        $('#Physical').click(function () {
+            if ($('#Physical').is(':checked')) {
+                $("#Weight").prop('readonly', false);
+                $("#Length").prop('readonly', false);
+                $("#Height").prop('readonly', false);
+                $("#Width").prop('readonly', false);
+            }
+        });
+        $('#Virtual').click(function () {
+            if ($('#Virtual').is(':checked')) {
+                $("#Weight").val(0);
+                $("#Length").val(0);
+                $("#Height").val(0);
+                $("#Width").val(0);
+                $("#Weight").prop('readonly', true);
+                $("#Length").prop('readonly', true);
+                $("#Height").prop('readonly', true);
+                $("#Width").prop('readonly', true);
+
+            }
+        });
+        try {
+            $('#btnUpload').click(function (event) {
+                event.preventDefault();
+                let file = $("#img-upload").get(0).files;
+                let fileData = new FormData();
+                var fileType = file[0].type;
+                var validImageTypes = ["image/gif", "image/jpeg", "image/png"];
+                if ($.inArray(fileType, validImageTypes) < 0) {
+                    $("#msgUpload").html("Choose a Valid Image.").css("color", "red");
+                }
+                else {
+                    fileData.append("Image", file[0]);
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("Upload")",
+                        data: fileData,
+                        dataType: 'json',
+                        processData: false,
+                        contentType: false,
+                        enctype: "multipart/form-data",
+                        success: function (result) {
+                            $("#msgUpload").html(result).css("color", "black");
+                        },
+                        error: function (err) {
+                            $("#msgUpload").html(err).css("color", "red");
+                        }
+                    });
+                }
+
+            });
+
+        } catch (e) {
+            $("#msgUpload").html("Failed to Upload file.").css("color", "red");
+            console.log(e.description);
+        }
+
+        onSuccess = function (response) {
+            window.location.href = response.redirectToUrl;
+        }
+    });
+</script>
