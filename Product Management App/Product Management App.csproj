@@ -333,8 +333,6 @@
     <Content Include="Views\Shared\_site.cshtml" />
     <Content Include="Views\Products\AddProduct.cshtml" />
     <Content Include="Views\Products\Create.cshtml" />
-    <Content Include="Views\Products\Delete.cshtml" />
-    <Content Include="Views\Products\Details.cshtml" />
     <Content Include="Views\Products\Edit.cshtml" />
     <Content Include="Views\Products\Index.cshtml" />
     <None Include="Web.Debug.config">
